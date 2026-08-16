@@ -150,7 +150,8 @@
   #champ.show{opacity:1;transform:translateX(-50%) scale(1)}
   #champ .crown{font-size:60px;filter:drop-shadow(0 6px 16px rgba(0,0,0,.5))}
   #champ .ttl{font-size:15px;letter-spacing:3px;text-transform:uppercase;color:var(--dim);font-weight:700;margin-top:6px}
-  #champ .who{font-size:52px;font-weight:900;letter-spacing:-1px;
+  #champ{max-width:92vw}
+  #champ .who{font-size:52px;font-weight:900;letter-spacing:-1px;text-wrap:balance;
     background:linear-gradient(120deg,#ffd23f,#ff9f1c,#34d399,#22d3ee);
     -webkit-background-clip:text;background-clip:text;color:transparent;
     filter:drop-shadow(0 4px 18px rgba(255,210,63,.35))}
@@ -232,13 +233,115 @@
     .team .p{ font-size:14px; }
     .statgrid{ grid-template-columns:1fr; }
   }
+
+  /* ============ SAVE AS PDF / PRINT ============
+     Same DOM, printed on white with the app's palette carried over. */
+  #printHead{display:none}
+  @media print{
+    @page{ margin:12mm; }
+    :root{
+      --card:#fff; --card2:#fff; --line:#dfe4ec; --txt:#101418; --dim:#5b6472;
+      --ink-green:#0a7a52; --ink-cyan:#0f6f7d; --ink-gold:#916d00; --ink-blue:#1b4ca0;
+      --wash-green:#e9f8f1; --wash-cyan:#e6f6fa; --wash-gold:#fff6dd; --wash-blue:#ecf2ff;
+      --wash-rose:#fdeeec; --wash-violet:#f2edfd;
+    }
+    *{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    body{ background:#fff; color:var(--txt); padding:0; min-height:0; }
+
+    /* screen-only chrome */
+    header, .wrap>.card, .btnRow, .pickHint, .hint, .suggest, .err, #fx, #champ{ display:none !important; }
+    .wrap{ max-width:none; }
+
+    /* ---- masthead ---- */
+    #printHead{ display:block; margin-bottom:16px; border-radius:14px; overflow:hidden;
+      background:linear-gradient(120deg,var(--wash-green),var(--wash-cyan) 60%,var(--wash-blue));
+      border:1px solid #cfe6dd; }
+    #printHead .ph-bar{ height:6px; background:linear-gradient(90deg,#34d399,#22d3ee 45%,#60a5fa 75%,#ffd23f); }
+    #printHead .ph-title{ font-size:26px; font-weight:900; letter-spacing:-.7px; padding:12px 16px 0; }
+    #printHead .ph-sub{ font-size:11.5px; color:#42566a; padding:4px 16px 12px; letter-spacing:.3px; }
+    #printHead .ph-champ{ font-size:12px; font-weight:700; color:#42566a;
+      padding:8px 16px; border-top:1px solid rgba(0,0,0,.07); background:rgba(255,255,255,.55); }
+    #printHead .ph-champ.crowned{ color:#6b4e00; font-size:13.5px; letter-spacing:.3px;
+      background:linear-gradient(90deg,#ffe9a8,#fff6dd 70%); border-top:1px solid #e8cf86; }
+
+    /* ---- section cards ---- */
+    .card{ box-shadow:none; border:1px solid var(--line); border-radius:12px;
+      padding:12px; margin-bottom:11px; break-inside:avoid; }
+    .card h2, h2{ color:var(--ink-cyan) !important; }
+
+    /* ---- fairness summary ---- */
+    .summ{ gap:9px; margin-bottom:11px; }
+    .summ .b{ padding:8px 12px; border:0; border-radius:10px; }
+    .summ .v{ font-size:21px; } .summ .k{ font-size:10px; }
+    .summ .b:nth-child(1){ background:var(--wash-green); } .summ .b:nth-child(1) .v{ color:var(--ink-green); }
+    .summ .b:nth-child(2){ background:var(--wash-cyan); }  .summ .b:nth-child(2) .v{ color:var(--ink-cyan); }
+    .summ .b:nth-child(3){ background:var(--wash-blue); }  .summ .b:nth-child(3) .v{ color:var(--ink-blue); }
+    .summ .b:nth-child(4){ background:var(--wash-gold); }  .summ .b:nth-child(4) .v{ color:var(--ink-gold); }
+    .stat{ padding:7px 10px; border:0; background:#f5f7fa; border-left:3px solid #cbd5e1; border-radius:0 8px 8px 0; }
+    .stat .nm{ font-size:12.5px; } .stat .mt{ font-size:10.5px; }
+
+    /* ---- rounds ---- */
+    .round{ padding:10px 12px; margin-bottom:11px; border:1px solid var(--line);
+      border-radius:12px; break-inside:avoid; }
+    .round .top{ margin-bottom:8px; }
+    .round .rn{ display:inline-block; color:#fff; font-size:10.5px; letter-spacing:1px;
+      padding:4px 11px; border-radius:999px; background:linear-gradient(120deg,#0a7a52,#0f6f7d); }
+    .courtGame{ padding:9px; border-radius:10px; } .courts.multi{ gap:10px; }
+    .courtTag{ color:var(--ink-cyan); background:var(--wash-cyan); border-color:#b6e3ea;
+      margin-bottom:7px; padding:2px 8px; }
+    .match{ gap:10px; }
+    .team{ padding:8px 10px; gap:3px; box-shadow:none !important; transform:none !important; border-radius:10px; }
+    .team .p{ font-size:15px; } .team .lbl{ font-size:9.5px; }
+    .team.A{ background:linear-gradient(160deg,#fff6d8,#fffdf5); border:1px solid #ecc85f; }
+    .team.B{ background:linear-gradient(160deg,#e9f0ff,#f7faff); border:1px solid #93b6ef; }
+    .team.A .lbl{ color:var(--ink-gold); } .team.B .lbl{ color:var(--ink-blue); }
+    .team.win{ border:2px solid var(--ink-green); }
+    .team.win .lbl::after{ color:var(--ink-green); }
+    .team.lose{ opacity:.58; }
+    .vs{ font-size:11px; color:#9aa3b2; }
+
+    /* winning score in green, losing score greyed */
+    .scores{ margin-top:7px; }
+    .scores input{ border:0; background:none; -webkit-appearance:none; appearance:none;
+      width:auto; min-width:24px; padding:0; font-size:17px; color:#7b8697; }
+    .scores .sd{ color:#8f9aab; }
+    .scores .sd.A{ color:var(--ink-gold); } .scores .sd.B{ color:var(--ink-blue); }
+    .courtGame[data-win="A"] .scoreIn[data-side="A"],
+    .courtGame[data-win="B"] .scoreIn[data-side="B"]{ color:var(--ink-green); font-weight:900; }
+    .rest{ margin-top:8px; } .rest .rp{ background:#f2f5f9; border-color:#e2e8f0; }
+
+    /* ---- insights: cycling accent stripe ---- */
+    .ins{ padding:9px 11px; border:1px solid var(--line); border-left:4px solid var(--ink-green);
+      background:#fff; break-inside:avoid; }
+    .ins:nth-child(6n+2){ border-left-color:var(--ink-cyan);  background:var(--wash-cyan); }
+    .ins:nth-child(6n+3){ border-left-color:var(--ink-gold);  background:var(--wash-gold); }
+    .ins:nth-child(6n+4){ border-left-color:var(--ink-blue);  background:var(--wash-blue); }
+    .ins:nth-child(6n+5){ border-left-color:#b0342a;          background:var(--wash-rose); }
+    .ins:nth-child(6n+6){ border-left-color:#5b3fa8;          background:var(--wash-violet); }
+    .ins:nth-child(6n+1){ background:var(--wash-green); }
+    .ins .k{ font-size:9.5px; } .ins .v{ font-size:15px; } .ins .d{ font-size:11px; }
+
+    /* ---- leaderboard: podium rows + the form bar back ---- */
+    table.lb tr{ break-inside:avoid; }
+    table.lb th{ color:var(--ink-cyan); }
+    table.lb .w{ color:var(--ink-green); } table.lb .l{ color:#b0342a; }
+    table.lb tr.top1{ background:linear-gradient(90deg,#fff3c9,#fffbec); }
+    table.lb tr.top2{ background:linear-gradient(90deg,#eef1f5,#fbfcfd); }
+    table.lb tr.top3{ background:linear-gradient(90deg,#f9ece0,#fdf8f4); }
+    table.lb tr.top1 .rank{ color:#9a7400; } table.lb tr.top2 .rank{ color:#6b7280; }
+    table.lb tr.top3 .rank{ color:#a8663a; }
+    table.lb tr.top1 .rank, table.lb tr.top2 .rank, table.lb tr.top3 .rank{ font-weight:900; font-size:15px; }
+    table.lb .barcell{ display:table-cell; min-width:78px; }
+    .bar{ background:#eef1f5; height:7px; }
+    .bar>span{ background:linear-gradient(90deg,#0a7a52,#22d3ee); }
+  }
 </style>
 </head>
 <body>
 <canvas id="fx"></canvas>
 <div id="champ">
   <div class="crown">👑</div>
-  <div class="ttl">Champion</div>
+  <div class="ttl" id="champTtl">Champion</div>
   <div class="who" id="champName">—</div>
   <div class="sub" id="champSub"></div>
 </div>
@@ -299,6 +402,12 @@
 
   <!-- Output -->
   <div id="out">
+    <div id="printHead">
+      <div class="ph-bar"></div>
+      <div class="ph-title">🏸 Session Results</div>
+      <div class="ph-sub" id="printSub"></div>
+      <div class="ph-champ" id="printChamp"></div>
+    </div>
     <div class="card">
       <h2>Fairness summary</h2>
       <div class="summ" id="summ"></div>
@@ -306,6 +415,7 @@
     </div>
     <div class="btnRow" style="margin-bottom:14px">
       <button class="btn primary" id="reshuffle">🎲 Re-shuffle</button>
+      <button class="btn ghost" id="saveBtn">📄 Save as PDF</button>
       <button class="btn ghost" id="copyBtn">Copy schedule</button>
       <button class="btn ghost" id="resetResults">Reset results</button>
     </div>
@@ -324,9 +434,11 @@
 
 <script>
 // ---------------- state ----------------
-let players = [];
+let players = [];          // live roster you edit
 let teamSize = 2;          // 2 = doubles, 1 = singles
 let lastSchedule = null;
+let roster = [];           // snapshot taken at generate time — all analytics read THIS,
+                           // so editing players afterwards can't desync the stats
 
 const $ = (id) => document.getElementById(id);
 const chipsEl = $("chips"), countEl = $("count"), predictEl = $("predict"), errEl = $("err");
@@ -335,6 +447,22 @@ const chipsEl = $("chips"), countEl = $("count"), predictEl = $("predict"), errE
 const ROSTER_KEY = "badminton.roster";
 function saveRoster(){ try{ localStorage.setItem(ROSTER_KEY, JSON.stringify(players)); }catch(e){} }
 function loadRoster(){ try{ const s=localStorage.getItem(ROSTER_KEY); if(s) players=JSON.parse(s)||[]; }catch(e){} }
+
+// the whole in-progress session (roster snapshot + schedule + every result) survives a reload
+const SESS_KEY = "badminton.session";
+function saveSession(){
+  try{ localStorage.setItem(SESS_KEY, JSON.stringify({roster, data:lastSchedule})); }catch(e){}
+}
+function loadSession(){
+  try{
+    const s = JSON.parse(localStorage.getItem(SESS_KEY) || "null");
+    if(!s || !s.data || !s.data.schedule || !s.data.schedule.length) return;
+    roster = s.roster || [];
+    lastSchedule = s.data;
+    celebrated = true;        // don't replay the fireworks on every reload
+    render(lastSchedule);
+  }catch(e){}
+}
 
 function renderChips(){
   chipsEl.innerHTML = "";
@@ -465,28 +593,40 @@ function showSuggestion(minRounds, gamesEach){
 function gcd(a,b){ while(b){ [a,b]=[b,a%b]; } return a; }
 
 // ---------------- scheduler ----------------
-function pairKey(a,b){ return a<b ? a+"|"+b : b+"|"+a; }
+// \0 separator + no splitting anywhere: names containing "|" can't collide or be mis-parsed
+function sortPair(a,b){ return a<b ? [a,b] : [b,a]; }
+function pairKey(a,b){ return sortPair(a,b).join("\u0000"); }
+
+function shuffle(a){
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
 
 function generate(){
   const N = players.length, perGame = teamSize*2, R = resolveRounds();
   const courts = usableCourts(), seats = courts*perGame;
   if(N < perGame){ errEl.textContent = `Need at least ${perGame} players.`; return; }
   if(R < 1){ errEl.textContent = "Enter a number of at least 1."; return; }
+  roster = [...players];
 
   const games = {}, lastPlayed = {};
-  players.forEach(p=>{ games[p]=0; lastPlayed[p]=-999; });
+  roster.forEach(p=>{ games[p]=0; lastPlayed[p]=-999; });
   const partnerCount = {}, oppCount = {};
   const schedule = [];   // flat list of games, each tagged with round + court
 
   for(let r=0;r<R;r++){
-    // rank: fewest games first, then longest wait, then random — take `seats` players for this round
-    const ranked = [...players].sort((a,b)=>
-      (games[a]-games[b]) ||
-      (lastPlayed[a]-lastPlayed[b]) ||
-      (Math.random()-0.5)
+    // rank: fewest games first, then longest wait — take `seats` players for this round.
+    // Pre-shuffle + stable sort picks randomly among equals; a random comparator would be an
+    // inconsistent ordering (undefined behaviour) and a biased shuffle.
+    const ranked = shuffle([...roster]).sort((a,b)=>
+      (games[a]-games[b]) || (lastPlayed[a]-lastPlayed[b])
     );
-    const playing = ranked.slice(0, seats);
     const resting = ranked.slice(seats);
+    // rank decides WHO plays; which court they land on is random, so the hungriest players
+    // don't keep meeting each other on court 1.
+    // ponytail: court assignment is random, not opponent-optimised (the pairing optimiser below
+    // still runs within each court). Optimise across courts only if variety looks poor in practice.
+    const playing = shuffle(ranked.slice(0, seats));
 
     // split the round's players across courts, then form teams on each court
     for(let c=0;c<courts;c++){
@@ -529,11 +669,30 @@ function generate(){
     }
   }
 
-  lastSchedule = { schedule, games, N, R, perGame, courts };
+  const date = new Date().toLocaleDateString(undefined,{weekday:"short",day:"numeric",month:"short",year:"numeric"});
+  lastSchedule = { schedule, games, N, R, perGame, courts, date };
   render(lastSchedule, true);
 }
 
 // ---------------- render ----------------
+// Header for the printed/PDF sheet only — on screen the champion gets the banner + confetti.
+function renderPrintHead(data, nRounds){
+  const { schedule } = data;
+  const done = schedule.filter(r=>r.winner!=null).length;
+  const champs = done===schedule.length ? champions(schedule) : [];
+  $("printSub").textContent = [
+    data.date,
+    `${roster.length} players`,
+    `${nRounds} round${nRounds===1?"":"s"}`,
+    `${data.courts||1} court${(data.courts||1)===1?"":"s"}`,
+  ].filter(Boolean).join("  ·  ");
+  const champEl = $("printChamp");
+  champEl.className = "ph-champ" + (champs.length ? " crowned" : "");
+  champEl.textContent = champs.length
+    ? `🏆  ${champs.length>1?"JOINT CHAMPIONS":"CHAMPION"}  ·  ${nameList(champs.map(c=>c.p))}  ·  ${champs[0].wins} of ${champs[0].played} won`
+    : `${done} of ${schedule.length} games recorded`;
+}
+
 function render(data, scroll=false){
   const { schedule, games } = data;
   $("out").style.display = "block";
@@ -545,17 +704,19 @@ function render(data, scroll=false){
   const roundNums = Object.keys(rounds).map(Number).sort((a,b)=>a-b);
 
   // wait analysis: longest consecutive rounds a player sits out
-  const maxWait = {}; players.forEach(p=>maxWait[p]=0);
-  const cur = {}; players.forEach(p=>cur[p]=0);
+  const maxWait = {}; roster.forEach(p=>maxWait[p]=0);
+  const cur = {}; roster.forEach(p=>cur[p]=0);
   for(const rn of roundNums){
     const playing = new Set(rounds[rn].flatMap(x=>x.g.teams.flat()));
-    for(const p of players){
+    for(const p of roster){
       if(playing.has(p)) cur[p]=0;
       else { cur[p]++; if(cur[p]>maxWait[p]) maxWait[p]=cur[p]; }
     }
   }
   const gvals = Object.values(games);
   const worstWait = Math.max(...Object.values(maxWait), 0);
+
+  renderPrintHead(data, roundNums.length);
 
   // summary
   $("summ").innerHTML = `
@@ -565,7 +726,7 @@ function render(data, scroll=false){
     <div class="b"><div class="v">${worstWait}</div><div class="k">Longest wait (rounds)</div></div>`;
 
   // per-player stats
-  $("stats").innerHTML = players.map(p=>
+  $("stats").innerHTML = roster.map(p=>
     `<div class="stat"><div class="nm">${escapeHtml(p)}</div>
      <div class="mt">${games[p]} game${games[p]===1?"":"s"} · max wait ${maxWait[p]}</div></div>`
   ).join("");
@@ -584,7 +745,7 @@ function render(data, scroll=false){
       const sA = rnd.scoreA!=null ? rnd.scoreA : "";
       const sB = rnd.scoreB!=null ? rnd.scoreB : "";
       const courtTag = courts>1 ? `<span class="courtTag">Court ${rnd.court}</span>` : "";
-      return `<div class="courtGame">
+      return `<div class="courtGame" data-win="${decided ? (rnd.winner===0?"A":"B") : ""}">
         ${courtTag}
         <div class="match ${decided?"decided":""}">
           <div class="team A ${clsA}" data-game="${i}" data-team="0"><span class="lbl">Team A</span>${A.map(p=>`<span class="p">${escapeHtml(p)}</span>`).join("")}</div>
@@ -609,6 +770,7 @@ function render(data, scroll=false){
 
   renderLeaderboard(data);
   renderInsights(data);
+  saveSession();
   maybeCelebrate(data);
   if(scroll) $("out").scrollIntoView({behavior:"smooth", block:"start"});
 }
@@ -626,6 +788,7 @@ $("schedule").addEventListener("click",(e)=>{
 });
 
 // type a score -> derive winner live, without a full re-render (keeps focus)
+let celebTimer = null;
 $("schedule").addEventListener("input",(e)=>{
   const inp = e.target.closest(".scoreIn");
   if(!inp || !lastSchedule) return;
@@ -646,6 +809,7 @@ $("schedule").addEventListener("input",(e)=>{
   const match = box.querySelector(".match");
   const teams = box.querySelectorAll(".team");
   const decided = rnd.winner!=null;
+  box.dataset.win = decided ? (rnd.winner===0?"A":"B") : "";   // drives the print score colour
   match.classList.toggle("decided", decided);
   teams[0].classList.toggle("win", decided && rnd.winner===0);
   teams[0].classList.toggle("lose", decided && rnd.winner===1);
@@ -653,13 +817,17 @@ $("schedule").addEventListener("input",(e)=>{
   teams[1].classList.toggle("lose", decided && rnd.winner===0);
   renderLeaderboard(lastSchedule);
   renderInsights(lastSchedule);
-  maybeCelebrate(lastSchedule);
+  renderPrintHead(lastSchedule, new Set(lastSchedule.schedule.map(g=>g.round)).size);
+  saveSession();
+  // wait for typing to settle — "2" on the way to "21" must not fire the fireworks
+  clearTimeout(celebTimer);
+  celebTimer = setTimeout(()=>maybeCelebrate(lastSchedule), 800);
 });
 
 // ---------------- leaderboard ----------------
 function computeRecords(schedule){
   const rec = {};
-  players.forEach(p=>{ rec[p]={p,wins:0,losses:0,played:0,pf:0,pa:0}; });
+  roster.forEach(p=>{ rec[p]={p,wins:0,losses:0,played:0,pf:0,pa:0}; });
   for(const rnd of schedule){
     if(rnd.winner==null) continue;
     const winners = rnd.teams[rnd.winner], losers = rnd.teams[1-rnd.winner];
@@ -672,6 +840,30 @@ function computeRecords(schedule){
       if(hasScore){ rec[p].pf+=lScore; rec[p].pa+=wScore; } } }
   }
   return rec;
+}
+
+// Everything that decides an ordering: name is NOT part of it, so two players with the same
+// record tie rather than being separated by the alphabet.
+const rankKey = r => `${r.wins}|${r.winPct}|${r.diff}|${r.losses}`;
+
+// Everyone tied for best under `score` (higher wins). Every "best X" insight goes through this,
+// so a tie names all of them instead of silently picking whoever the sort happened to leave first.
+function topTied(arr, score){
+  if(!arr.length) return [];
+  const best = Math.max(...arr.map(score));
+  return arr.filter(r=>score(r)===best);
+}
+
+// pair lists get long fast in a short session — show a few, count the rest
+const capList = (a,n=3) => a.slice(0,n).join(" · ") + (a.length>n ? ` +${a.length-n} more` : "");
+
+// "Ann", "Ann & Bob", "Ann, Bob, Cat"
+const nameList = a => a.length===2 ? a.join(" & ") : a.join(", ");
+
+// Everyone tied at the top — usually one person, sometimes several.
+function champions(schedule){
+  const rows = rankRows(schedule).filter(r=>r.played>0);
+  return rows.filter(r=>rankKey(r)===rankKey(rows[0]));
 }
 
 // Single source of truth for ranking — leaderboard, insights, and celebration all use this.
@@ -692,6 +884,7 @@ function renderLeaderboard(data){
 
   const decidedCount = schedule.filter(r=>r.winner!=null).length;
   const maxWins = Math.max(1, ...rows.map(r=>r.wins));
+  const rankOf = [];
 
   const scoreCols = anyScores
     ? `<th>PF</th><th>PA</th><th>Diff</th>` : ``;
@@ -703,9 +896,13 @@ function renderLeaderboard(data){
         <th>Played</th><th>Wins</th><th>Losses</th><th>Win %</th>${scoreCols}<th class="barcell">Form</th>
       </tr></thead>
       <tbody>
-        ${rows.map((r,i)=>`
-          <tr class="${i<3?"top"+(i+1):""}">
-            <td class="rank">${i+1}</td>
+        ${rows.map((r,i,all)=>{
+          // standard competition ranking: equal records share a rank, the next one skips (1,1,3)
+          const rank = (i>0 && rankKey(r)===rankKey(all[i-1])) ? rankOf[i-1] : i+1;
+          rankOf[i] = rank;
+          return `
+          <tr class="${rank<=3?"top"+rank:""}">
+            <td class="rank">${rank}</td>
             <td class="name">${escapeHtml(r.p)}</td>
             <td>${r.played}</td>
             <td class="w">${r.wins}</td>
@@ -713,7 +910,8 @@ function renderLeaderboard(data){
             <td>${r.played? Math.round(r.winPct*100)+"%" : "—"}</td>
             ${anyScores? `<td>${r.pf}</td><td>${r.pa}</td><td class="${r.diff>0?"w":r.diff<0?"l":""}">${r.diff>0?"+":""}${r.diff}</td>`:``}
             <td class="barcell"><div class="bar"><span style="width:${(r.wins/maxWins)*100}%"></span></div></td>
-          </tr>`).join("")}
+          </tr>`;
+        }).join("")}
       </tbody>
     </table>
     <div class="pickHint">${decidedCount} of ${schedule.length} games recorded${decidedCount<schedule.length?" · enter a score or tap a winner in each game above":""}. ${anyScores?"PF = points for · PA = points against · Diff = net.":""}</div>`;
@@ -737,31 +935,38 @@ function renderInsights(data){
   const cards = [];
   const add = (ic,k,v,d)=>cards.push(`<div class="ins"><div class="ic">${ic}</div><div><div class="k">${k}</div><div class="v">${escapeHtml(v)}</div>${d?`<div class="d">${escapeHtml(d)}</div>`:""}</div></div>`);
 
-  // 1. Leader (same ranking as the leaderboard #1)
-  const best = rankRows(schedule).filter(r=>r.played>0)[0];
-  add("👑","Top of the table",best.p,`${best.wins} win${best.wins===1?"":"s"} from ${best.played} game${best.played===1?"":"s"}`);
+  // 1. Leader — plural when the top spot is shared
+  const top = champions(schedule), best = top[0];
+  add("👑", top.length>1 ? `Tied at the top (${top.length})` : "Top of the table",
+      nameList(top.map(r=>r.p)),
+      `${best.wins} win${best.wins===1?"":"s"} from ${best.played} game${best.played===1?"":"s"}${top.length>1?" each":""}`);
 
   // 2. Best win rate (min 2 games)
   const rateElig = arr.filter(r=>r.played>=2);
   if(rateElig.length){
-    const hr = [...rateElig].sort((a,b)=>(b.wins/b.played)-(a.wins/a.played))[0];
-    add("🎯","Best win rate",`${Math.round(hr.wins/hr.played*100)}% — ${hr.p}`,`${hr.wins}/${hr.played} games won`);
+    const hr = topTied(rateElig, r=>r.wins/r.played);
+    add("🎯","Best win rate",`${Math.round(hr[0].wins/hr[0].played*100)}% — ${nameList(hr.map(r=>r.p))}`,
+        `${hr[0].wins}/${hr[0].played} games won${hr.length>1?" each":""}`);
   }
 
   // 3. Win/loss streaks (chronological)
   const streaks = streakInsight(schedule, rec);
-  if(streaks.hot) add("🔥","Hottest streak",`${streaks.hot.p} — ${streaks.hot.len} in a row`,"Consecutive wins");
-  if(streaks.cold) add("🧊","Cold spell",`${streaks.cold.p} — ${streaks.cold.len} losses`,"Consecutive losses");
+  if(streaks.hot) add("🔥","Hottest streak",`${streaks.hot.names} — ${streaks.hot.len} in a row`,"Consecutive wins");
+  if(streaks.cold) add("🧊","Cold spell",`${streaks.cold.names} — ${streaks.cold.len} losses`,"Consecutive losses");
 
   // 4. Point machine / stingy defense (scored games only)
   if(scored.length){
     const withScore = arr.filter(r=>r.pf>0||r.pa>0);
-    const attacker = [...withScore].sort((a,b)=>(b.pf/b.played)-(a.pf/a.played))[0];
-    if(attacker) add("💥","Most points scored",attacker.p,`${(attacker.pf/attacker.played).toFixed(1)} pts/game (${attacker.pf} total)`);
-    const wall = [...withScore].sort((a,b)=>(a.pa/a.played)-(b.pa/b.played))[0];
-    if(wall) add("🛡️","Toughest to score on",wall.p,`${(wall.pa/wall.played).toFixed(1)} pts conceded/game`);
-    const bestDiff = [...withScore].sort((a,b)=>(b.pf-b.pa)-(a.pf-a.pa))[0];
-    if(bestDiff) add("📈","Best point differential",`${bestDiff.p} (${bestDiff.pf-bestDiff.pa>0?"+":""}${bestDiff.pf-bestDiff.pa})`,`Scored ${bestDiff.pf}, conceded ${bestDiff.pa}`);
+    const attacker = topTied(withScore, r=>r.pf/r.played);
+    if(attacker.length) add("💥","Most points scored",nameList(attacker.map(r=>r.p)),
+        `${(attacker[0].pf/attacker[0].played).toFixed(1)} pts/game (${attacker[0].pf} total)`);
+    const wall = topTied(withScore, r=>-(r.pa/r.played));
+    if(wall.length) add("🛡️","Toughest to score on",nameList(wall.map(r=>r.p)),
+        `${(wall[0].pa/wall[0].played).toFixed(1)} pts conceded/game`);
+    const bestDiff = topTied(withScore, r=>r.pf-r.pa);
+    if(bestDiff.length){ const d=bestDiff[0].pf-bestDiff[0].pa;
+      add("📈","Best point differential",`${nameList(bestDiff.map(r=>r.p))} (${d>0?"+":""}${d})`,
+          `Scored ${bestDiff[0].pf}, conceded ${bestDiff[0].pa}`); }
 
     // biggest blowout & closest game
     let blow=null, close=null;
@@ -774,18 +979,19 @@ function renderInsights(data){
     if(close && close.m>0){ add("😮‍💨","Nail-biter",`${close.r.scoreA}–${close.r.scoreB}`,`Game ${close.r.round}: decided by ${close.m}`); }
   }
 
-  // 5. Best & worst partnership (doubles only)
-  if(teamSize===2){
-    const pd = partnerInsight(schedule);
-    if(pd.best) add("🤝","Best duo",pd.best.names,`${pd.best.wins}/${pd.best.games} won together`);
-    if(pd.worst && pd.worst.games>=2 && pd.worst.wins<pd.worst.games)
-      add("💔","Struggling duo",pd.worst.names,`${pd.worst.wins}/${pd.worst.games} won together`);
-  }
+  // 5. Best & worst partnership — reads the schedule, not the live format toggle,
+  // so flipping to Singles can't blank out a doubles session's duos. ({} for singles.)
+  const pd = partnerInsight(schedule);
+  if(pd.best?.length) add("🤝","Best duo",capList(pd.best.map(d=>d.names)),
+      `${pd.best[0].wins}/${pd.best[0].games} won together${pd.best.length>1?" each":""}`);
+  if(pd.worst?.length && pd.worst[0].games>=2 && pd.worst[0].wins<pd.worst[0].games)
+    add("💔","Struggling duo",capList(pd.worst.map(d=>d.names)),
+      `${pd.worst[0].wins}/${pd.worst[0].games} won together${pd.worst.length>1?" each":""}`);
 
   // 6. Most improved-ish / unlucky: most losses
-  const unlucky=[...arr].sort((a,b)=>b.losses-a.losses)[0];
-  if(unlucky && unlucky.losses>=2 && unlucky.wins<unlucky.losses)
-    add("🍀","Due for a win",unlucky.p,`${unlucky.losses} losses so far`);
+  const unlucky=topTied(arr, r=>r.losses);
+  if(unlucky.length && unlucky[0].losses>=2 && unlucky[0].wins<unlucky[0].losses)
+    add("🍀","Due for a win",nameList(unlucky.map(r=>r.p)),`${unlucky[0].losses} losses so far`);
 
   // 7. Undefeated (min 2 games, no losses)
   const undef = arr.filter(r=>r.played>=2 && r.losses===0).sort((a,b)=>b.wins-a.wins);
@@ -798,12 +1004,14 @@ function renderInsights(data){
   // 9. Active streak (currently on a run)
   const active = activeStreak(schedule);
   if(active && active.len>=2) add(active.type==="W"?"⚡":"⬇️", active.type==="W"?"On fire right now":"Needs to bounce back",
-      `${active.p} — ${active.len} ${active.type==="W"?"wins":"losses"} in a row`, "Current active streak");
+      `${active.names} — ${active.len} ${active.type==="W"?"wins":"losses"} in a row`, "Current active streak");
 
   // 10. Head-to-head: nemesis & bunny
   const h2h = h2hInsight(schedule);
-  if(h2h.rivalry) add("⚔️","Biggest rivalry",h2h.rivalry.names,`Faced off ${h2h.rivalry.games} times (${h2h.rivalry.split})`);
-  if(h2h.nemesis) add("😈","Most one-sided matchup",`${h2h.nemesis.loser} vs ${h2h.nemesis.winner}`,`${h2h.nemesis.winner} leads ${h2h.nemesis.w}-${h2h.nemesis.l}`);
+  if(h2h.rivalry) add("⚔️","Biggest rivalry",h2h.rivalry.names,
+      `Faced off ${h2h.rivalry.games} times${h2h.rivalry.many?" each":""}`);
+  if(h2h.nemesis) add("😈","Most one-sided matchup",h2h.nemesis.names,
+      h2h.nemesis.many?"Biggest head-to-head gaps":"Biggest head-to-head gap");
 
   // 11. Clutch: best record in close games (margin <= 3, scored)
   if(scored.length){
@@ -836,19 +1044,19 @@ function renderInsights(data){
 function streakInsight(schedule, rec){
   // walk games in order, track current W/L streak per player
   const curW={}, curL={}, bestW={}, bestL={};
-  players.forEach(p=>{curW[p]=curL[p]=bestW[p]=bestL[p]=0;});
+  roster.forEach(p=>{curW[p]=curL[p]=bestW[p]=bestL[p]=0;});
   for(const rnd of schedule){
     if(rnd.winner==null) continue;
     const W=rnd.teams[rnd.winner], L=rnd.teams[1-rnd.winner];
     for(const p of W){ curW[p]++; curL[p]=0; if(curW[p]>bestW[p])bestW[p]=curW[p]; }
     for(const p of L){ curL[p]++; curW[p]=0; if(curL[p]>bestL[p])bestL[p]=curL[p]; }
   }
-  let hot=null, cold=null;
-  players.forEach(p=>{
-    if(bestW[p]>=2 && (!hot||bestW[p]>hot.len)) hot={p,len:bestW[p]};
-    if(bestL[p]>=2 && (!cold||bestL[p]>cold.len)) cold={p,len:bestL[p]};
-  });
-  return {hot,cold};
+  // tie-aware: everyone on the longest streak, not whoever the roster listed first
+  const longest = (best)=>{
+    const who = topTied(roster.filter(p=>best[p]>=2), p=>best[p]);
+    return who.length ? {names:nameList(who), len:best[who[0]], n:who.length} : null;
+  };
+  return { hot:longest(bestW), cold:longest(bestL) };
 }
 
 function partnerInsight(schedule){
@@ -865,24 +1073,28 @@ function partnerInsight(schedule){
   }
   const all=Object.values(map).filter(d=>d.games>=1);
   if(!all.length) return {};
-  const best=[...all].sort((a,b)=>(b.wins/b.games-a.wins/a.games)||(b.games-a.games))[0];
-  const worst=[...all].sort((a,b)=>(a.wins/a.games-b.wins/b.games)||(b.games-a.games))[0];
-  return {best,worst};
+  // tie-aware both ways: best rate first, then the most-played among equal rates
+  return {
+    best:  topTied(topTied(all, d=>  d.wins/d.games ), d=>d.games),
+    worst: topTied(topTied(all, d=>-(d.wins/d.games)), d=>d.games),
+  };
 }
 
 // current (most recent) active streak across all players
 function activeStreak(schedule){
   const cur={}, type={};
-  players.forEach(p=>{cur[p]=0;type[p]=null;});
+  roster.forEach(p=>{cur[p]=0;type[p]=null;});
   for(const rnd of schedule){
     if(rnd.winner==null) continue;
     const W=rnd.teams[rnd.winner], L=rnd.teams[1-rnd.winner];
     for(const p of W){ type[p]==="W"?cur[p]++:(cur[p]=1,type[p]="W"); }
     for(const p of L){ type[p]==="L"?cur[p]++:(cur[p]=1,type[p]="L"); }
   }
-  let best=null;
-  players.forEach(p=>{ if(cur[p]>=2 && (!best||cur[p]>best.len)) best={p,len:cur[p],type:type[p]}; });
-  return best;
+  const on = topTied(roster.filter(p=>cur[p]>=2), p=>cur[p]);
+  if(!on.length) return null;
+  // a W streak and an L streak can tie on length — only group players on the same kind
+  const kind = type[on[0]], same = on.filter(p=>type[p]===kind);
+  return { names:nameList(same), len:cur[on[0]], type:kind };
 }
 
 // head-to-head across opposing sides (uses individual players)
@@ -892,7 +1104,7 @@ function h2hInsight(schedule){
     if(rnd.winner==null) continue;
     const W=rnd.teams[rnd.winner], L=rnd.teams[1-rnd.winner];
     for(const w of W) for(const l of L){
-      const key=pairKey(w,l), [x,y]=key.split("|");
+      const key=pairKey(w,l), [x,y]=sortPair(w,l);
       if(!pair[key]) pair[key]={x,y,xW:0,yW:0,games:0};
       pair[key].games++;
       if(w===x) pair[key].xW++; else pair[key].yW++;
@@ -900,20 +1112,21 @@ function h2hInsight(schedule){
   }
   const all=Object.values(pair);
   if(!all.length) return {};
-  // biggest rivalry = most games between the same two people
-  const rivalryRaw=[...all].sort((a,b)=>b.games-a.games)[0];
-  const rivalry = rivalryRaw.games>=2 ? {
-    names:`${rivalryRaw.x} vs ${rivalryRaw.y}`, games:rivalryRaw.games,
-    split:`${rivalryRaw.xW}-${rivalryRaw.yW}`
+  // biggest rivalry = most games between the same two people (every pair on that count)
+  const rivals = topTied(all, p=>p.games);
+  const rivalry = rivals[0].games>=2 ? {
+    names: capList(rivals.map(r=>`${r.x} vs ${r.y} (${r.xW}-${r.yW})`)),
+    games: rivals[0].games, many: rivals.length>1,
   } : null;
-  // most one-sided = biggest lopsided record (min 2 games)
-  const dom=[...all].filter(p=>p.games>=2)
-    .sort((a,b)=>Math.abs(b.xW-b.yW)-Math.abs(a.xW-a.yW))[0];
-  let nemesis=null;
-  if(dom && dom.xW!==dom.yW){
-    const winner = dom.xW>dom.yW?dom.x:dom.y, loser = dom.xW>dom.yW?dom.y:dom.x;
-    nemesis={winner,loser,w:Math.max(dom.xW,dom.yW),l:Math.min(dom.xW,dom.yW)};
-  }
+  // most one-sided = biggest lopsided record (min 2 games), again every pair tied on the gap
+  const dom = topTied(all.filter(p=>p.games>=2 && p.xW!==p.yW), p=>Math.abs(p.xW-p.yW));
+  const nemesis = dom.length ? {
+    names: capList(dom.map(d=>{
+      const [w,l] = d.xW>d.yW ? [d.x,d.y] : [d.y,d.x];
+      return `${w} over ${l} (${Math.max(d.xW,d.yW)}-${Math.min(d.xW,d.yW)})`;
+    })),
+    many: dom.length>1,
+  } : null;
   return {rivalry,nemesis};
 }
 
@@ -967,6 +1180,7 @@ $("resetResults").onclick = ()=>{
   lastSchedule.schedule.forEach(r=>{ r.winner=null; r.scoreA=null; r.scoreB=null; });
   render(lastSchedule);
 };
+$("saveBtn").onclick = ()=> print();   // browser print dialog → "Save as PDF" on every platform
 $("copyBtn").onclick = ()=>{
   if(!lastSchedule) return;
   const courts = lastSchedule.courts || 1;
@@ -1050,17 +1264,19 @@ function fxTick(){
   if(fxParticles.length || now<fxUntil){ fxRaf=requestAnimationFrame(fxTick); }
   else { fx.style.display="none"; if(fxRaf)cancelAnimationFrame(fxRaf); fxRaf=null; }
 }
-function celebrate(champ){
+function celebrate(champs){
   fxResize(); fx.style.display="block";
   fxUntil = performance.now()+4500;
   confettiBurst();
   for(let i=0;i<5;i++) setTimeout(()=>firework(rand(innerWidth*0.2,innerWidth*0.8),rand(innerHeight*0.2,innerHeight*0.5)), i*180);
   for(let i=0;i<8;i++) setTimeout(balloon, i*120);
   if(!fxRaf) fxRaf=requestAnimationFrame(fxTick);
-  // champion banner
-  if(champ){
-    $("champName").textContent = champ.p;
-    $("champSub").textContent = `${champ.wins} wins${champ.played?` · ${Math.round(champ.wins/champ.played*100)}% win rate`:""}`;
+  // champion banner — a shared top spot crowns everyone in it, nobody wins on the alphabet
+  if(champs && champs.length){
+    const c0 = champs[0];
+    $("champTtl").textContent = champs.length>1 ? `Joint Champions` : "Champion";
+    $("champName").textContent = nameList(champs.map(c=>c.p));
+    $("champSub").textContent = `${c0.wins} win${c0.wins===1?"":"s"}${c0.played?` · ${Math.round(c0.wins/c0.played*100)}% win rate`:""}${champs.length>1?" each — dead heat":""}`;
     const c=$("champ"); c.classList.add("show");
     setTimeout(()=>c.classList.remove("show"), 5000);
   }
@@ -1072,14 +1288,40 @@ function maybeCelebrate(data){
   const allDone = schedule.length>0 && schedule.every(r=>r.winner!=null);
   if(allDone && !celebrated){
     celebrated = true;
-    const champ = rankRows(schedule).filter(r=>r.played>0)[0];
-    celebrate(champ);
+    celebrate(champions(schedule));
   }
   if(!allDone) celebrated = false; // reset if a result is cleared
 }
 
 loadRoster();
 renderChips();
+loadSession();
+
+// ---------------- self-check: open index.html#selftest, watch the console ----------------
+if(location.hash === "#selftest"){
+  const keep = localStorage.getItem(SESS_KEY);   // don't clobber a real session
+  const ok = (c,m)=>{ if(!c) throw new Error("FAIL: "+m); console.log("ok:",m); };
+  planMode = "rounds";
+  for(const [n,size,courts,R] of [[5,2,1,5],[8,2,2,4],[7,1,3,7],[10,2,2,5],[4,2,1,3]]){
+    players = Array.from({length:n},(_,i)=>"P"+(i+1));
+    teamSize = size; $("courts").value = courts; $("rounds").value = R;
+    generate();
+    const counts = Object.values(lastSchedule.games);
+    const tag = `${n}p ${size}v${size} ${courts}ct`;
+    ok(Math.max(...counts)-Math.min(...counts) <= 1, `${tag}: games differ by ≤1 (${Math.min(...counts)}–${Math.max(...counts)})`);
+    const byRound = {};
+    lastSchedule.schedule.forEach(g=>(byRound[g.round]=byRound[g.round]||[]).push(g));
+    ok(Object.keys(byRound).length === R, `${tag}: ${R} rounds`);
+    for(const rn in byRound){
+      const on = byRound[rn].flatMap(g=>g.teams.flat());
+      ok(new Set(on).size === on.length, `${tag} r${rn}: nobody plays two courts at once`);
+      ok(new Set([...on, ...byRound[rn][0].resting]).size === n, `${tag} r${rn}: playing + resting = whole roster`);
+    }
+  }
+  ok(pairKey("a|b","c") !== pairKey("a","b|c"), "pairKey: '|' in a name can't collide");
+  keep==null ? localStorage.removeItem(SESS_KEY) : localStorage.setItem(SESS_KEY, keep);
+  console.log("%cself-check passed","color:#34d399;font-weight:700");
+}
 </script>
 </body>
 </html>
