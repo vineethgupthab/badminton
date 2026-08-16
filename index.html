@@ -284,12 +284,14 @@
     .stat .nm{ font-size:12.5px; } .stat .mt{ font-size:10.5px; }
 
     /* ---- rounds ---- */
+    /* .round grows with the court count (20 courts = ~1660px, taller than a page), so it
+       must be allowed to break. The atom that must never split is a single game. */
     .round{ padding:10px 12px; margin-bottom:11px; border:1px solid var(--line);
-      border-radius:12px; break-inside:avoid; }
+      border-radius:12px; }
     .round .top{ margin-bottom:8px; }
     .round .rn{ display:inline-block; color:#fff; font-size:10.5px; letter-spacing:1px;
       padding:4px 11px; border-radius:999px; background:linear-gradient(120deg,#0a7a52,#0f6f7d); }
-    .courtGame{ padding:9px; border-radius:10px; } .courts.multi{ gap:10px; }
+    .courtGame{ padding:9px; border-radius:10px; break-inside:avoid; } .courts.multi{ gap:10px; }
     .courtTag{ color:var(--ink-cyan); background:var(--wash-cyan); border-color:#b6e3ea;
       margin-bottom:7px; padding:2px 8px; }
     .match{ gap:10px; }
