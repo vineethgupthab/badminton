@@ -265,8 +265,11 @@
       background:linear-gradient(90deg,#ffe9a8,#fff6dd 70%); border-top:1px solid #e8cf86; }
 
     /* ---- section cards ---- */
+    /* NB: no break-inside:avoid on .card — a card taller than one page (long leaderboard,
+       many insights) cannot honour it, and some engines clip the overflow instead of
+       breaking, silently dropping the tail of the section. Only atoms that fit get it. */
     .card{ box-shadow:none; border:1px solid var(--line); border-radius:12px;
-      padding:12px; margin-bottom:11px; break-inside:avoid; }
+      padding:12px; margin-bottom:11px; }
     .card h2, h2{ color:var(--ink-cyan) !important; }
 
     /* ---- fairness summary ---- */
@@ -323,6 +326,7 @@
 
     /* ---- leaderboard: podium rows + the form bar back ---- */
     table.lb tr{ break-inside:avoid; }
+    table.lb thead{ display:table-header-group; }   /* repeat the header on every page */
     table.lb th{ color:var(--ink-cyan); }
     table.lb .w{ color:var(--ink-green); } table.lb .l{ color:#b0342a; }
     table.lb tr.top1{ background:linear-gradient(90deg,#fff3c9,#fffbec); }
