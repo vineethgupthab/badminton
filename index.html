@@ -172,7 +172,7 @@
   .summ .k{font-size:12px;color:var(--dim);text-transform:uppercase;letter-spacing:.6px}
 
   /* ============ MOBILE ============ */
-  @media (max-width: 640px){
+  @media screen and (max-width: 640px){
     body{ padding:18px 12px calc(60px + env(safe-area-inset-bottom));
       background-attachment:fixed; }
     .wrap{ max-width:100%; }
@@ -229,7 +229,7 @@
   }
 
   /* very narrow phones */
-  @media (max-width: 380px){
+  @media screen and (max-width: 380px){
     .team .p{ font-size:14px; }
     .statgrid{ grid-template-columns:1fr; }
   }
@@ -246,7 +246,15 @@
       --wash-rose:#fdeeec; --wash-violet:#f2edfd;
     }
     *{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-    body{ background:#fff; color:var(--txt); padding:0; min-height:0; }
+    /* Anything that scrolls, is fixed, or is sized in viewport units breaks pagination in
+       WebKit: the box cannot split, so everything past page 1 is clipped instead of carried.
+       Paper has no viewport and no scrolling, so neutralise all three unconditionally. */
+    html, body{ height:auto !important; min-height:0 !important;
+      background-attachment:scroll !important; overflow:visible !important; }
+    body{ background:#fff; color:var(--txt); padding:0; }
+    #lb, #schedule, #out, .wrap, .card{ overflow:visible !important;
+      -webkit-overflow-scrolling:auto !important; max-height:none !important; }
+    [style*="position:fixed"], .fixed{ position:static !important; }
 
     /* screen-only chrome */
     header, .wrap>.card, .btnRow, .pickHint, .hint, .suggest, .err, #fx, #champ{ display:none !important; }
