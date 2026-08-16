@@ -334,6 +334,13 @@
     .ins:nth-child(6n+1){ background:var(--wash-green); }
     .ins .k{ font-size:9.5px; } .ins .v{ font-size:15px; } .ins .d{ font-size:11px; }
 
+    /* ---- leaderboard ----
+       Always starts a fresh page, so the table never shares a page with the rounds/insights.
+       break-BEFORE (not break-inside:avoid) is the safe way to do this: the card can still
+       split internally if the roster is huge, so it can never be clipped. Fits one page up
+       to ~20 players (41px/row); beyond that it flows on with the header repeated. */
+    #lbCard{ break-before:page; page-break-before:always; }
+
     /* ---- leaderboard: podium rows + the form bar back ---- */
     table.lb tr{ break-inside:avoid; }
     table.lb thead{ display:table-header-group; }   /* repeat the header on every page */
@@ -439,7 +446,7 @@
       <h2>💡 Insights</h2>
       <div id="insights"></div>
     </div>
-    <div class="card">
+    <div class="card" id="lbCard">
       <h2>🏆 Leaderboard</h2>
       <div id="lb"></div>
     </div>
